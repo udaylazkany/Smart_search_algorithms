@@ -17,7 +17,7 @@ public class Firststate {
     public static void main(String[] args) {
         // TODO code application logic here
        //humainplayer human=new humainplayer();
-       //DFSPlayer dfs=new DFSPlayer();
+       DFSPlayer dfs=new DFSPlayer();
     }
     
 }

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
 package firststate;
 
 import java.util.ArrayDeque;
@@ -15,7 +19,6 @@ private final move mov;
 private final HashMap<String, int[][]> parent = new HashMap<>();
 private final HashMap<Integer, int[]> fixedPositions;
 private final int cols;
-private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
 
 public DFSPlayer() {
         mat = new matrix();
@@ -43,34 +46,6 @@ public DFSPlayer() {
         boolean found = dfs(start);
         System.out.println(found ? " solution" : "No solution");
     }
-
-private List<int[][]> generateNextStates(int[][] state) {
-    List<int[][]> results = new ArrayList<>();
-     
-
-    for (int i = 0; i < state.length; i++) {
-        for (int j = 0; j < state[i].length; j++) {
-            if (state[i][j] != 0) continue;  
-          
-            
-
-            for (int[] d : DIRS) {
-                int si = i + d[0];
-                int sj = j + d[1];
-
-                if (si < 0 || si >= state.length || sj < 0 || sj >= state[0].length) continue;
-                if (state[si][sj] == 0) continue;
-
-            
-                int[][] copy = cm.deepCopy(state);
-                copy[i][j] = state[si][sj];  
-                results.add(copy);
-            }
-        }
-    }
-    return results;
-}
-
 private boolean dfs(int[][] start) {
         Deque<int[][]> stack = new ArrayDeque<>();
         stack.push(start);
@@ -87,7 +62,7 @@ private boolean dfs(int[][] start) {
             int[][] current = stack.pop();
             popCount++;
 
-            List<int[][]> children = generateNextStates(current);
+            List<int[][]> children = cm.generateNextStates(current);
 
             System.out.println("--- POP #" + popCount
                     + " (zeros=" + countZeros(current)
