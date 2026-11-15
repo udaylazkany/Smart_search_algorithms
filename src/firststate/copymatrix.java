@@ -5,6 +5,7 @@
 package firststate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,9 +14,12 @@ import java.util.List;
  * @author asus
  */
 public class copymatrix {
+    
+public final matrix mat =new matrix() ;
 private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
 private HashMap<String,int[][]> visited=new HashMap<>();
 private ArrayList<Long> time =new ArrayList<>();
+public final HashMap<String, int[][]> parent = new HashMap<>();
 public int[][] deepCopy(int[][] src) {
         int[][] dst = new int[src.length][];
         for (int i = 0; i < src.length; i++)
@@ -66,4 +70,36 @@ public String signature(int[][] m) {
                 sb.append(v).append(',');
         return sb.toString();
     }
+
+public int countZeros(int[][] g) {
+        int c = 0;
+        for (int[] row : g)
+            for (int v : row)
+                if (v == 0) c++;
+        return c;
+    }
+
+public List<int[][]> getPath(int[][] goal) {
+    List<int[][]> path = new ArrayList<>();
+    int[][] cur = goal;
+
+    while (cur != null) {
+        path.add(cur);
+        cur = parent.get(signature(cur)); 
+    }
+
+    Collections.reverse(path); 
+    return path;
+}
+
+public void printPath(int[][] goal) {
+    List<int[][]> path = getPath(goal);
+    System.out.println("=== Path (" + path.size() + " steps) ===");
+    for (int i = 0; i < path.size(); i++) {
+        System.out.println("Step " + i + ":");
+        mat.printmat(path.get(i));
+        System.out.println();
+    }
+}
+  
 }
