@@ -13,24 +13,19 @@ public class DFSPlayer {
 
 
 private final copymatrix cm;
-private final move mov;
-private final HashMap<Integer, int[]> fixedPositions;
+
+
 private final int cols;
 
 public DFSPlayer() {
      
         cm = new copymatrix();
-        mov = new move();
+      
 
         cols = cm.mat.grid[0].length;
 
     
-        fixedPositions = mov.findpair(cm.mat.grid);
-
-       
-        mov.protectedcellset(fixedPositions, cols);
-
-      
+     
         int[][] start = cm.deepCopy(cm.mat.grid);
 
         System.out.println("=== Initial State ===");

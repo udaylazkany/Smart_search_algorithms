@@ -5,8 +5,6 @@
 package firststate;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -15,21 +13,19 @@ public class BFSPlayer {
 
 
 private final copymatrix cm;
-private final move mov;
-private final HashMap<Integer, int[]> fixedPositions;
+
+
 private final int cols;
-private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
+
 
     public BFSPlayer() {
        
         
         cm = new copymatrix();
-        mov = new move();
+      
 
         cols = cm.mat.grid[0].length;
-        fixedPositions = mov.findpair(cm.mat.grid);
-        mov.protectedcellset(fixedPositions, cols);
-
+      
         int[][] start = cm.deepCopy(cm.mat.grid);
 
         System.out.println("=== Initial State ===");
@@ -43,28 +39,6 @@ private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
         System.out.println(found ? " solution" : "No solution");
     }
 
-    private List<int[][]> generateNextStates(int[][] state) {
-        List<int[][]> results = new ArrayList<>();
-
-        for (int i = 0; i < state.length; i++) {
-            for (int j = 0; j < state[i].length; j++) {
-                if (state[i][j] != 0) continue;
-
-                for (int[] d : DIRS) {
-                    int si = i + d[0];
-                    int sj = j + d[1];
-
-                    if (si < 0 || si >= state.length || sj < 0 || sj >= state[0].length) continue;
-                    if (state[si][sj] == 0) continue;
-
-                    int[][] copy = cm.deepCopy(state);
-                    copy[i][j] = state[si][sj];
-                    results.add(copy);
-                }
-            }
-        }
-        return results;
-    }
 
     private boolean bfs(int[][] start) {
    
@@ -84,7 +58,7 @@ private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
             int[][] current = queue.poll();       
             popCount++;
 
-            List<int[][]> children = generateNextStates(current);
+            List<int[][]> children = cm.generateNextStates(current);
 
             System.out.println("--- POLL #" + popCount
                     + " (zeros=" + cm.countZeros(current)
