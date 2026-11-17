@@ -13,7 +13,6 @@ public class AStarPlayer {
    
   
     private final HashMap<String, Integer> gCost = new HashMap<>();
-    private final int cols;
   
     private final HashSet<String> closed = new HashSet<>();
   
@@ -34,7 +33,6 @@ public class AStarPlayer {
         cm = new copymatrix();
      
 
-        cols = mat.grid[0].length;
 
         int[][] start = cm.deepCopy(mat.grid);
 
@@ -48,8 +46,6 @@ public class AStarPlayer {
         boolean found = aStar(start);
         System.out.println(found ? " Solution" : " No solution");
     }
-
-    // ================= A* =================
 private boolean aStar(int[][] start) {
     PriorityQueue<Node> open = new PriorityQueue<>(
         Comparator.comparingInt(n -> n.f)
@@ -58,6 +54,9 @@ private boolean aStar(int[][] start) {
     String startSig = cm.signature(start);
     cm.parent.put(startSig, null);
     gCost.put(startSig, 0);
+
+    cm.direction.put(startSig, -1);
+
     open.offer(new Node(start, 0, cm.countZeros(start)));
 
     int step = 0;
@@ -67,6 +66,7 @@ private boolean aStar(int[][] start) {
         Node current = open.poll();
         String curSig = cm.signature(current.state);
 
+        if (current.g > gCost.getOrDefault(curSig, Integer.MAX_VALUE)) continue;
         if (closed.contains(curSig)) continue;
         closed.add(curSig);
 
@@ -76,33 +76,42 @@ private boolean aStar(int[][] start) {
                 + ", h=" + cm.countZeros(current.state)
                 + ", f=" + current.f + ") ---");
 
-      
         if (mat.solvegride(current.state)) {
             System.out.println(" Solved at pop #" + popped
                     + " (g=" + current.g + ")");
             mat.printmat(current.state);
             cm.printPath(current.state);
+            
             return true;
         }
 
+        int prevDir = cm.direction.getOrDefault(curSig, -1);
+
         for (int[][] next : cm.generateNextStates(current.state)) {
             String nextSig = cm.signature(next);
-            int newG = current.g + 1;
+
+            int newDir = cm.getDirection(current.state, next);
+
+            int stepCost = (prevDir != -1 && newDir != prevDir) ? 2 : 1;
+
+            int newG =  stepCost;
             int newH = cm.countZeros(next);
             int newF = newG + newH;
 
             if (newG < gCost.getOrDefault(nextSig, Integer.MAX_VALUE)) {
                 gCost.put(nextSig, newG);
                 cm.parent.put(nextSig, current.state);
-                closed.remove(nextSig);
+
+                cm.direction.put(nextSig, newDir);
 
                 step++;
                 System.out.println(">>> NEW State #" + step
-                        + " (g=" + newG + ", h=" + newH + ", f=" + newF + ")");
+                        + " (g=" + newG + ", h=" + newH + ", f=" + newF
+                        + ", dir=" + newDir  + ")");
                 mat.printmat(next);
                 System.out.println();
 
-                open.offer(new Node(next, newG, newF));   
+                open.offer(new Node(next, newG, newF));
             }
         }
     }

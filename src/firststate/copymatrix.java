@@ -14,12 +14,16 @@ import java.util.List;
  * @author asus
  */
 public class copymatrix {
-    
+public final HashMap<String, Integer> direction = new HashMap<>();
 public final matrix mat =new matrix() ;
 private static final int[][] DIRS = {{-1,0},{1,0},{0,-1},{0,1}};
-private HashMap<String,int[][]> visited=new HashMap<>();
-private ArrayList<Long> time =new ArrayList<>();
+private final HashMap<String,int[][]> visited=new HashMap<>();
+private final ArrayList<Long> time;
 public final HashMap<String, int[][]> parent = new HashMap<>();
+
+    public copymatrix() {
+        this.time = new ArrayList<>();
+    }
 public int[][] deepCopy(int[][] src) {
         int[][] dst = new int[src.length][];
         for (int i = 0; i < src.length; i++)
@@ -78,6 +82,26 @@ public int countZeros(int[][] g) {
                 if (v == 0) c++;
         return c;
     }
+
+public int getDirection(int[][] from, int[][] to) {
+    int[] p1 = findZero(from);
+    int[] p2 = findZero(to);
+    if (p1 == null || p2 == null) return -1;
+    int dr = p2[0] - p1[0];
+    int dc = p2[1] - p1[1];
+    if (dr == -1 && dc == 0) return 0; 
+    if (dr ==  1 && dc == 0) return 1; 
+    if (dr ==  0 && dc == -1) return 2; 
+    if (dr ==  0 && dc ==  1) return 3;
+    return -1;
+}
+
+private int[] findZero(int[][] m) {
+    for (int i = 0; i < m.length; i++)
+        for (int j = 0; j < m[i].length; j++)
+            if (m[i][j] == 0) return new int[]{i, j};
+    return null;
+}
 
 public List<int[][]> getPath(int[][] goal) {
     List<int[][]> path = new ArrayList<>();

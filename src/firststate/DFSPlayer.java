@@ -6,7 +6,6 @@ package firststate;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
 
 public class DFSPlayer {
@@ -15,14 +14,12 @@ public class DFSPlayer {
 private final copymatrix cm;
 
 
-private final int cols;
 
 public DFSPlayer() {
      
         cm = new copymatrix();
       
 
-        cols = cm.mat.grid[0].length;
 
     
      

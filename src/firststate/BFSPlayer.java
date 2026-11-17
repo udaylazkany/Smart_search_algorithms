@@ -6,7 +6,6 @@ package firststate;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
 
 public class BFSPlayer {
@@ -14,17 +13,12 @@ public class BFSPlayer {
 
 private final copymatrix cm;
 
-
-private final int cols;
-
-
     public BFSPlayer() {
        
         
         cm = new copymatrix();
       
 
-        cols = cm.mat.grid[0].length;
       
         int[][] start = cm.deepCopy(cm.mat.grid);
 
@@ -38,8 +32,6 @@ private final int cols;
         boolean found = bfs(start);
         System.out.println(found ? " solution" : "No solution");
     }
-
-
     private boolean bfs(int[][] start) {
    
         Deque<int[][]> queue = new ArrayDeque<>();
